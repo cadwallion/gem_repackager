@@ -1,4 +1,4 @@
-# Gem::Repackager
+# Gem::Repackager [![Build Status](https://secure.travis-ci.org/cadwallion/gem_repackager.png)](http://travis-ci.org/cadwallion/gem_repackager)
 
 Have you ever been without internet and needed a gem but it's in the wrong RVM gemset?
 How about attempting to correct a problem with a production environment and need to
