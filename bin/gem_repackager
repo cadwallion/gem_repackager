@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'gem_repackager'
+
+# gem_repackager all /opt/ruby/gems destination=/home/cadwallion/gems
+# gem_repackager activemodel-3.2.8,activesupport-3.2.8 directory=/opt/ruby/gems
+
+command = ARGV[0]
+directory = ARGV[1]
+destination = ENV['destination'] || directory
+packager = Gem::Repackager.new directory
+
+if directory && command
+  if command == 'all'
+    packager.package_all destination
+    puts "Gems repackaged: #{packager.gems_built.size}. Gems failed: #{packager.gems_failed.size}."
+  else
+    gems = command.split(',')
+    gems.each do |gem|
+      name, version = gem.split '-'
+      filename = packager.package_gem name: name, version: version
+
+      if filename
+        FileUtils.mv filename, destination
+        puts "#{gem} created at #{destination}"
+      else
+        puts "#{gem} could not be repackaged."
+      end
+    end
+  end
+else
+  puts "Usage: gem_repackager all|gem-version[,gem-version] directory [destination=/gems]"
+end
