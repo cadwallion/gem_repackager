@@ -1,3 +1,5 @@
+require 'gem_repackager/version'
+
 module Gem
   module UserInteraction
     def silent_alert_warning(*) ; end

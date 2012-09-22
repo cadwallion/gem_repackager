@@ -21,6 +21,11 @@ OptionParser.new do |opts|
   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
     options[:verbose] = v
   end
+
+  opts.on_tail("--version", "Show version") do
+    puts Gem::Repackager::VERSION
+    exit
+  end
 end.parse!
 
 directory = ARGV[0]
