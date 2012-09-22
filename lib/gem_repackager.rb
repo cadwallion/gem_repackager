@@ -37,8 +37,6 @@ module Gem
       @gems_built = []
       @gems_failed = []
 
-      silence_warnings
-
       FileUtils.cd(@gem_dir)
       Dir['specifications/*.gemspec'].each do |spec_filename|
         spec = load_spec filename: spec_filename
@@ -52,7 +50,6 @@ module Gem
         end
       end
 
-      reset_warnings
       @gems_built
     end
 

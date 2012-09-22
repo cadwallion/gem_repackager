@@ -1,33 +1,46 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'gem_repackager'
 
-# gem_repackager all /opt/ruby/gems destination=/home/cadwallion/gems
-# gem_repackager activemodel-3.2.8,activesupport-3.2.8 /opt/ruby/gems
+options = {}
 
-command = ARGV[0]
-directory = ARGV[1]
-destination = ENV['destination'] || directory
-packager = Gem::Repackager.new directory
+OptionParser.new do |opts|
+  opts.banner = "Usage: gem_repackager DIRECTORY [options]"
 
-if directory && command
-  if command == 'all'
-    packager.package_all destination
-    puts "Gems repackaged: #{packager.gems_built.size}. Gems failed: #{packager.gems_failed.size}."
-  else
-    gems = command.split(',')
-    gems.each do |gem|
+  opts.on("--destination N", String, "Set custom directory for gems to be sent") do |v|
+    options[:destination] = v
+  end
+
+  opts.on('--gems x,y,z', Array, 'Comma-separated list of gem-version') do |list|
+    options[:gems] = list
+  end
+end.parse!
+
+directory = ARGV[0]
+options[:destination] ||= directory
+
+if directory
+  packager = Gem::Repackager.new directory
+  packager.silence_warnings
+
+  if options[:gems]
+    options[:gems].each do |gem|
       name, version = gem.split '-'
-      filename = packager.package_gem name: name, version: version
+      spec = packager.load_spec name: name, version: version
+      filename = packager.package_gem spec
 
       if filename
-        FileUtils.mv filename, destination
-        puts "#{gem} created at #{destination}"
+        FileUtils.mv filename, options[:destination]
+        puts "#{gem} created at #{options[:destination]}"
       else
         puts "#{gem} could not be repackaged."
       end
     end
+  else
+    packager.package_all options[:destination]
+    puts "Gems repackaged: #{packager.gems_built.size}. Gems failed: #{packager.gems_failed.size}."
   end
 else
-  puts "Usage: gem_repackager all|gem-version[,gem-version] directory [destination=/gems]"
+  puts "Usage: gem_repackager DIRECTORY [options]"
 end
