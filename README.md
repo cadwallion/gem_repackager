@@ -34,6 +34,8 @@ there.
 * `--gems gem-version[,gem-version,...]` - A comma-separated list of gems in "GEM-VERSION"
 * `--destination DIR` - Location to store the packaged .gem files to. If this is not
 passed, it will default to `DIRECTORY`
+* `--[no]-verbose` - Toggle verbose mode. This includes Gem::Specification warnings,
+so this could get noisy.
 
 Here's an example of packaging all gems in my current RVM gemset to a custom directory:
 
