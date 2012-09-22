@@ -3,7 +3,7 @@
 require 'gem_repackager'
 
 # gem_repackager all /opt/ruby/gems destination=/home/cadwallion/gems
-# gem_repackager activemodel-3.2.8,activesupport-3.2.8 directory=/opt/ruby/gems
+# gem_repackager activemodel-3.2.8,activesupport-3.2.8 /opt/ruby/gems
 
 command = ARGV[0]
 directory = ARGV[1]
