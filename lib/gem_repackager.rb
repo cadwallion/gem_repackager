@@ -37,8 +37,7 @@ module Gem
       @gems_built = []
       @gems_failed = []
 
-      FileUtils.cd(@gem_dir)
-      Dir['specifications/*.gemspec'].each do |spec_filename|
+      Dir["#{@gem_dir}/specifications/*.gemspec"].each do |spec_filename|
         spec = load_spec filename: spec_filename
         gem = package_gem spec
 
@@ -73,12 +72,10 @@ module Gem
     # @param [String] filename (.gemspec) of gem
     # @return [Gem::Specification] parsed .gemspec
     def load_spec options = {}
-      FileUtils.cd(@gem_dir)
-
       if options[:filename]
         filename = options[:filename]
       elsif options[:name] && options[:version]
-        filename = "specifications/#{options[:name]}-#{options[:version]}.gemspec"
+        filename = "#{@gem_dir}/specifications/#{options[:name]}-#{options[:version]}.gemspec"
       end
 
       Gem::Specification.load filename
